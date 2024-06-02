@@ -2,56 +2,36 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const SearchBar = ({ onSearch }) => {
-    const [query, setQuery] = useState('');
+    const [input, setInput] = useState('');
 
-    const handleChange = (event) => {
-        setQuery(event.target.value);
-    };
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        onSearch(query);
+    const handleChange = (e) => {
+        setInput(e.target.value);
+        onSearch(e.target.value);
     };
 
     return (
-        <Form id='searchBar' onSubmit={handleSubmit}>
-            <Input
+        <SearchBarContainer>
+            <input
                 type="text"
-                value={query}
-                onChange={handleChange}
                 placeholder="Search for a movie..."
+                value={input}
+                onChange={handleChange}
             />
-            <Button type="submit">Search</Button>
-        </Form>
+        </SearchBarContainer>
     );
 };
 
-const Form = styled.form`
+const SearchBarContainer = styled.div`
     display: flex;
     justify-content: center;
-    margin: 20px 0;
-`;
+    margin: 20px;
 
-const Input = styled.input`
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-right: 10px;
-    width: 300px;
-`;
-
-const Button = styled.button`
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    background-color: #e50914;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-
-    &:hover {
-        background-color: #f40612;
+    input {
+        width: 50%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        font-size: 16px;
     }
 `;
 

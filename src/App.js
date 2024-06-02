@@ -9,8 +9,15 @@ import SearchResults from './components/SearchResults';
 
 const App = () => {
     const [searchResults, setSearchResults] = useState([]);
+    const [query, setQuery] = useState('');
 
     const handleSearch = async (query) => {
+        setQuery(query);
+        if (!query) {
+            setSearchResults([]);
+            return;
+        }
+
         const response = await fetch(
             `https://api.themoviedb.org/3/search/movie?api_key=1f0a969ae1c5c0d783759e5c50e1e967&language=en-US&query=${query}&page=1&include_adult=false`
         );
@@ -23,15 +30,20 @@ const App = () => {
             <NavBar />
             <Banner />
             <SearchBar onSearch={handleSearch} />
-            {searchResults.length > 0 && <SearchResults results={searchResults} />}
-            <Row title="NETFLIX ORIGINALS" fetchUrl={requests.fetchNetflixOriginals} isLargeRow />
-            <Row title="Trending Now" fetchUrl={requests.fetchTrending} />
-            <Row title="Top Rated" fetchUrl={requests.fetchTopRated} />
-            <Row title="Action Movies" fetchUrl={requests.fetchActionMovies} />
-            <Row title="Comedy Movies" fetchUrl={requests.fetchComedyMovies} />
-            <Row title="Horror Movies" fetchUrl={requests.fetchHorrorMovies} />
-            <Row title="Romance Movies" fetchUrl={requests.fetchRomanceMovies} />
-            <Row title="Documentaries" fetchUrl={requests.fetchDocumentaries} />
+            {searchResults.length > 0 ? (
+                <SearchResults results={searchResults} />
+            ) : (
+                <>
+                    <Row title="NETFLIX ORIGINALS" fetchUrl={requests.fetchNetflixOriginals} />
+                    <Row title="Trending Now" fetchUrl={requests.fetchTrending} />
+                    <Row title="Top Rated" fetchUrl={requests.fetchTopRated} />
+                    <Row title="Action Movies" fetchUrl={requests.fetchActionMovies} />
+                    <Row title="Comedy Movies" fetchUrl={requests.fetchComedyMovies} />
+                    <Row title="Horror Movies" fetchUrl={requests.fetchHorrorMovies} />
+                    <Row title="Romance Movies" fetchUrl={requests.fetchRomanceMovies} />
+                    <Row title="Documentaries" fetchUrl={requests.fetchDocumentaries} />
+                </>
+            )}
         </div>
     );
 };
