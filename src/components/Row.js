@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Row = ({ title, fetchUrl }) => {
@@ -18,22 +19,21 @@ const Row = ({ title, fetchUrl }) => {
     return (
         <RowContainer>
             <h2>{title}</h2>
-            <GridContainer>
+            <ScrollContainer>
                 {movies.map((movie) => (
-                    <Poster key={movie.id}>
-                        <img
-                            src={`${base_url}${movie.poster_path}`}
-                            alt={movie.name}
-                        />
-                        <Info>
-                            <h3>{movie.title || movie.name || movie.original_name}</h3>
-                            <p><strong>Release Date:</strong> {movie.release_date || movie.first_air_date}</p>
-                            <p><strong>Rating:</strong> {movie.vote_average}</p>
-                            {/* <p>{movie.overview}</p> */}
-                        </Info>
-                    </Poster>
+                    <Link to={`/movie/${movie.id}`} key={movie.id}>
+                        <Poster>
+                            <img src={`${base_url}${movie.poster_path}`} alt={movie.name} />
+                            <Info>
+                                <h3>{movie.title || movie.name || movie.original_name}</h3>
+                                <p><strong>Release Date:</strong> {movie.release_date || movie.first_air_date}</p>
+                                <p><strong>Rating:</strong> {movie.vote_average}</p>
+                                <Overview>{movie.overview}</Overview>
+                            </Info>
+                        </Poster>
+                    </Link>
                 ))}
-            </GridContainer>
+            </ScrollContainer>
         </RowContainer>
     );
 };
@@ -47,55 +47,76 @@ const RowContainer = styled.div`
     }
 `;
 
-const GridContainer = styled.div`
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 20px;
+const ScrollContainer = styled.div`
+    display: flex;
+    overflow-x: scroll;
     padding: 20px;
+    gap: 20px;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 `;
 
 const Poster = styled.div`
     position: relative;
+    min-width: 300px;
+    max-width: 300px;
+    height: 450px;
     transition: transform 450ms;
 
     &:hover {
-        transform: scale(1.2);
-        z-index: 1;
+        transform: scale(1.05);
     }
 
     img {
         border-radius: 10px;
         width: 100%;
-        height: auto;
+        height: 100%;
         object-fit: cover;
     }
 
     &:hover div {
-        display: block;
+        transform: translateY(0);
+        opacity: 1;
     }
 `;
 
 const Info = styled.div`
-    display: none;
     position: absolute;
     bottom: 0;
-    background: rgb(13 13 13 / 70%);
+    background: rgba(0, 0, 0, 0.8);
     color: white;
-    padding: 20px;
+    padding: 10px;
     width: 100%;
-    height: 100%;
     border-radius: 0 0 10px 10px;
-    overflow-y: scroll;
+    transition: transform 450ms ease-in-out, opacity 450ms ease-in-out;
+    transform: translateY(100%);
+    opacity: 0;
 
     h3 {
-        margin: 0 0 10px 0;
-        font-size: 18px;
+        margin: 5px 0;
+        font-size: 16px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     p {
-        margin: 5px 0;
-        font-size: 14px;
+        margin: 2px 0;
+        font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
+`;
+
+const Overview = styled.p`
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
 export default Row;

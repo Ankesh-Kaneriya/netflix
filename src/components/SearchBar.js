@@ -1,37 +1,62 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import SearchResults from './SearchResults';
 
-const SearchBar = ({ onSearch }) => {
-    const [input, setInput] = useState('');
+const SearchBar = ({ setSearchResults }) => {
+    const [query, setQuery] = useState('');
 
-    const handleChange = (e) => {
-        setInput(e.target.value);
-        onSearch(e.target.value);
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        if (!query) return;
+
+        const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=1f0a969ae1c5c0d783759e5c50e1e967&query=${query}`);
+        const data = await response.json();
+        setSearchResults(data.results);
     };
 
     return (
-        <SearchBarContainer>
-            <input
-                type="text"
-                placeholder="Search for a movie..."
-                value={input}
-                onChange={handleChange}
-            />
-        </SearchBarContainer>
+        <SearchContainer>
+            <form onSubmit={handleSearch}>
+                <input
+                    type="text"
+                    placeholder="Search for a movie..."
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                />
+                <button type="submit">Search</button>
+            </form>
+        </SearchContainer>
     );
 };
 
-const SearchBarContainer = styled.div`
+const SearchContainer = styled.div`
     display: flex;
     justify-content: center;
-    margin: 20px;
+    margin: 20px 0;
+
+    form {
+        display: flex;
+    }
 
     input {
-        width: 50%;
         padding: 10px;
-        border-radius: 5px;
-        border: 1px solid #ddd;
         font-size: 16px;
+        border: none;
+        border-radius: 5px 0 0 5px;
+    }
+
+    button {
+        padding: 10px;
+        font-size: 16px;
+        border: none;
+        border-radius: 0 5px 5px 0;
+        background-color: #e50914;
+        color: white;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #f40612;
     }
 `;
 

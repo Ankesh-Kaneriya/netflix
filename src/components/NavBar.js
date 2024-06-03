@@ -1,33 +1,65 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
-const NavBar = () => {
+const Navbar = ({ setSearchTerm }) => {
+    const [input, setInput] = useState('');
+    const navigate = useNavigate();
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (input.trim()) {
+            setSearchTerm(input);
+            navigate(`/search/${input}`);
+        }
+    };
+
     return (
-        <NavContainer>
-            <img
-                className="nav__logo"
-                src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
-                alt="Netflix Logo"
-            />
-            <img
-                className="nav__avatar"
-                src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
-                alt="User Avatar"
-            />
-        </NavContainer>
+        <Nav>
+            <Logo src="/logo.png" alt="Logo" />
+            <SearchForm onSubmit={handleSearch}>
+                <SearchInput 
+                    type="text" 
+                    placeholder="Search for a movie..."
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                />
+                <SearchButton type="submit">Search</SearchButton>
+            </SearchForm>
+        </Nav>
     );
 };
 
-const NavContainer = styled.div`
-    height: 60px;
-    position: fixed;
-    top: 0;
-    width: 100%;
+const Nav = styled.nav`
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    padding: 20px;
+    padding: 10px 20px;
     background-color: #111;
-    z-index: 1;
 `;
 
-export default NavBar;
+const Logo = styled.img`
+    height: 40px;
+`;
+
+const SearchForm = styled.form`
+    display: flex;
+`;
+
+const SearchInput = styled.input`
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+`;
+
+const SearchButton = styled.button`
+    padding: 5px 10px;
+    margin-left: 10px;
+    border: none;
+    background-color: #e50914;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+`;
+
+export default Navbar;

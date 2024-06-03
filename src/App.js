@@ -1,51 +1,41 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
-import Row from './components/Row';
 import requests from './requests';
-import Banner from './components/Banner';
-import NavBar from './components/NavBar';
+import Row from './components/Row';
 import SearchBar from './components/SearchBar';
 import SearchResults from './components/SearchResults';
+import MovieDetail from './components/MovieDetail';
+import Navbar from './components/NavBar';
+import Banner from './components/Banner';
 
-const App = () => {
-    const [searchResults, setSearchResults] = useState([]);
-    const [query, setQuery] = useState('');
 
-    const handleSearch = async (query) => {
-        setQuery(query);
-        if (!query) {
-            setSearchResults([]);
-            return;
-        }
+function App() {
+  const [searchTerm, setSearchTerm] = useState('');
 
-        const response = await fetch(
-            `https://api.themoviedb.org/3/search/movie?api_key=1f0a969ae1c5c0d783759e5c50e1e967&language=en-US&query=${query}&page=1&include_adult=false`
-        );
-        const data = await response.json();
-        setSearchResults(data.results);
-    };
-
-    return (
-        <div className="App">
-            <NavBar />
-            <Banner />
-            <SearchBar onSearch={handleSearch} />
-            {searchResults.length > 0 ? (
-                <SearchResults results={searchResults} />
-            ) : (
-                <>
-                    <Row title="NETFLIX ORIGINALS" fetchUrl={requests.fetchNetflixOriginals} />
-                    <Row title="Trending Now" fetchUrl={requests.fetchTrending} />
-                    <Row title="Top Rated" fetchUrl={requests.fetchTopRated} />
-                    <Row title="Action Movies" fetchUrl={requests.fetchActionMovies} />
-                    <Row title="Comedy Movies" fetchUrl={requests.fetchComedyMovies} />
-                    <Row title="Horror Movies" fetchUrl={requests.fetchHorrorMovies} />
-                    <Row title="Romance Movies" fetchUrl={requests.fetchRomanceMovies} />
-                    <Row title="Documentaries" fetchUrl={requests.fetchDocumentaries} />
-                </>
-            )}
-        </div>
-    );
-};
+  return (
+      <div className="App">
+          <Router>
+              <Navbar setSearchTerm={setSearchTerm} />
+              <Routes>
+                  <Route path="/" element={
+                      <>
+                       <Banner fetchUrl={requests.fetchTrending} />
+                          <Row title="Trending Now" fetchUrl={requests.fetchTrending} />
+                          <Row title="Top Rated" fetchUrl={requests.fetchTopRated} />
+                          <Row title="Action Movies" fetchUrl={requests.fetchActionMovies} />
+                          <Row title="Comedy Movies" fetchUrl={requests.fetchComedyMovies} />
+                          <Row title="Horror Movies" fetchUrl={requests.fetchHorrorMovies} />
+                          <Row title="Romance Movies" fetchUrl={requests.fetchRomanceMovies} />
+                          <Row title="Documentaries" fetchUrl={requests.fetchDocumentaries} />
+                      </>
+                  } />
+                  <Route path="/movie/:movieId" element={<MovieDetail />} />
+                  <Route path="/search/:searchTerm" element={<SearchResults searchTerm={searchTerm} />} />
+              </Routes>
+          </Router>
+      </div>
+  );
+}
 
 export default App;
