@@ -46,8 +46,9 @@ const ResultsContainer = styled.div`
 
 const Result = styled.div`
     position: relative;
-    width: 300px;
-    height: 450px;
+    min-width: 20vw;
+    max-width: 20vw;
+    height: auto;
     transition: transform 450ms;
 
     &:hover {
@@ -65,6 +66,16 @@ const Result = styled.div`
         transform: translateY(0);
         opacity: 1;
     }
+    @media (max-width: 550px) {
+    min-width: 25vw;
+    max-width: 25vw;
+    height: auto;
+  }
+
+  @media (max-width: 350px) {
+    min-width: 32vw;
+    height: auto;
+  }
 `;
 
 const Info = styled.div`

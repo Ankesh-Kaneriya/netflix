@@ -33,7 +33,6 @@ const Banner = () => {
                 </Buttons>
                 <h2>{truncate(movie?.overview, 150)}</h2>
             </Content>
-            <FadeBottom />
         </Header>
     );
 };
@@ -42,6 +41,7 @@ const Header = styled.header`
     color: white;
     object-fit: contain;
     height: 448px;
+    overflow: auto;
 `;
 
 const Content = styled.div`
@@ -88,14 +88,6 @@ const Buttons = styled.div`
     }
 `;
 
-const FadeBottom = styled.div`
-    height: 7.4rem;
-    background-image: linear-gradient(
-        180deg,
-        transparent,
-        rgba(37, 37, 37, 0.61),
-        #111
-    );
-`;
+
 
 export default Banner;

@@ -8,6 +8,7 @@ const MovieDetail = () => {
     const [relatedMovies, setRelatedMovies] = useState([]);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         async function fetchMovie() {
             const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=1f0a969ae1c5c0d783759e5c50e1e967`);
             const data = await response.json();
@@ -123,10 +124,11 @@ const ScrollContainer = styled.div`
 
 const Poster = styled.div`
     position: relative;
-    min-width: 300px;
-    max-width: 300px;
-    height: 450px;
+    min-width: 20vw;
+    max-width: 20vw;
+    height: auto;
     transition: transform 450ms;
+    overflow: hidden;
 
     &:hover {
         transform: scale(1.05);
@@ -135,7 +137,7 @@ const Poster = styled.div`
     img {
         border-radius: 10px;
         width: 100%;
-        height: 70%;
+        height: 100%;
         object-fit: cover;
     }
 
@@ -143,6 +145,16 @@ const Poster = styled.div`
         transform: translateY(0);
         opacity: 1;
     }
+    @media (max-width: 550px) {
+    min-width: 25vw;
+    max-width: 25vw;
+    height: auto;
+  }
+
+  @media (max-width: 350px) {
+    min-width: 32vw;
+    height: auto;
+  }
 `;
 
 const Info = styled.div`
